@@ -22,4 +22,11 @@ public class RestExceptionHandler {
         return new ResponseEntity<>(badRequest, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<BadRequest> exceptionHandler(UserExistException exception) {
+        BadRequest badRequest = new BadRequest();
+        badRequest.setInfo(exception.getMessage());
+        return new ResponseEntity<>(badRequest, HttpStatus.BAD_REQUEST);
+    }
+
 }

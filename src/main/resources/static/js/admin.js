@@ -7,10 +7,8 @@ let delForm = document.querySelector('#delForm')
 
 renderUserTable()
 
-// отслеживает клики по кнопкам Edit и Delete в таблице
 userTable.addEventListener('click', click => {
 
-    // при клике по кнопке Delete, данные о юзере из таблицы помещаются в модальное окно
     if (click.target.classList.contains('del-btn')) {
         let user = getUserByEvent(click)
         $("#delId").val(user.id)
@@ -21,7 +19,6 @@ userTable.addEventListener('click', click => {
         $('#delRoles').html(user.roles.map(role => `<option value='ROLE_${role}'>${role}</option>`))
     }
 
-    // при клике по кнопке Edit, данные о юзере из таблицы помещаются в модальное окно
     if (click.target.classList.contains('edit-btn')) {
         let user = getUserByEvent(click)
         $("#editId").val(user.id)
@@ -39,28 +36,56 @@ userTable.addEventListener('click', click => {
 addForm.addEventListener('submit', evt => {
     evt.preventDefault()
     fetch(url, {method: 'POST', body: new FormData(addForm)})
-        .then(result => result.json())
-        .then(user => renderUserTable())
-    document.querySelector('#tableLink').click()
-    addForm.reset()
-    window.scrollTo(0,0)
+        .then(response => {
+            if (response.ok) {
+                response.json().then(user => {
+                    renderTableRow(user)
+                    document.querySelector('#tableLink').click()
+                    window.scrollTo(0,0)
+                    successMessage(`User with name "${user.name}" has been added`)
+                    addForm.reset()
+                })
+            } else {
+                errorMessage(addForm, response)
+            }
+        })
+        .catch(e => console.error(e))
 })
 
 delForm.addEventListener('submit', evt => {
     evt.preventDefault()
     const id = delForm.querySelector('#delId').value
+    const name = delForm.querySelector('#delName').value
     fetch(`${url}/${id}`, {method: 'DELETE'})
-        .then(result => result.text())
-        .then(user => renderUserTable())
-    $(".modal").modal("hide")
+        .then(response => {
+            if (response.ok) {
+                renderUserTable()
+                $(".modal").modal("hide")
+                window.scrollTo(0,0)
+                successMessage(`User with name "${name}" has been removed`)
+            } else {
+                errorMessage(delForm, response)
+            }
+        })
+        .catch(e => console.log(e))
 })
 
 editForm.addEventListener('submit', evt => {
     evt.preventDefault()
     fetch(url, {method: 'PUT', body: new FormData(editForm)})
-        .then(result => result.json())
-        .then(user => renderUserTable())
-    $(".modal").modal("hide")
+        .then(response => {
+            if (response.ok) {
+                response.json().then(user => {
+                    renderUserTable()
+                    $(".modal").modal("hide")
+                    window.scrollTo(0,0)
+                    successMessage(`User with name "${user.name}" has been updated`)
+                })
+            } else {
+                errorMessage(editForm, response)
+            }
+        })
+        .catch(e => console.error(e))
 })
 
 function getUserByEvent(click) {
@@ -83,19 +108,49 @@ function renderUserTable() {
         .then(response => response.json())
         .then(users => {
             userTable.innerHTML = ''
-            users.forEach(user => {
-                userTable.innerHTML +=
-                    `<tr>
-                <td class="id">${user.id}</td>
-                <td class="name">${user.name}</td>
-                <td class="surname">${user.surname}</td>
-                <td class="age">${user.age}</td>
-                <td class="email">${user.email}</td>
-                <td class="roles">${user.roles.map(role => role.name.split('_')[1]).toString().replace(',', ' ')}
-                <td class="password d-none">${user.password}</td>
-                <td><button type="button" class="edit-btn btn btn-info" data-toggle="modal" data-target="#editModal">Edit</button></td>
-                <td><button type="button" class="del-btn btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</button></td>
-            </tr>`
-            })
+            users.forEach(user => renderTableRow(user))
         })
+}
+
+function renderTableRow(user) {
+    userTable.innerHTML +=
+        `<tr>
+            <td class="id">${user.id}</td>
+            <td class="name">${user.name}</td>
+            <td class="surname">${user.surname}</td>
+            <td class="age">${user.age}</td>
+            <td class="email">${user.email}</td>
+            <td class="roles">${user.roles.map(role => role.name.split('_')[1]).toString().replace(',', ' ')}
+            <td class="password d-none">${user.password}</td>
+            <td><button type="button" class="edit-btn btn btn-info" data-toggle="modal" data-target="#editModal">Edit</button></td>
+            <td><button type="button" class="del-btn btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</button></td>
+        </tr>`
+}
+
+function errorMessage(form, response) {
+    response.json()
+        .then(data => data.info)
+        .then(text => {
+            form.querySelector('.danger-info').insertAdjacentHTML('beforebegin',
+                `<div class="alert alert-danger alert-dismissible fade show mx-4 font-weight-normal" role="alert">
+                        ${text}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>`
+            )
+        })
+    setTimeout(() => $('.alert').remove(), 8000)
+}
+
+function successMessage(info) {
+    $('table').before(
+        `<div class="alert alert-success alert-dismissible fade show" role="alert">
+            ${info}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>`
+    )
+    setTimeout(() => $('.alert').remove(), 8000)
 }
