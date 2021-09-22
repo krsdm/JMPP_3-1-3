@@ -29,7 +29,6 @@ public class MainController {
     public String userList(@AuthenticationPrincipal User activeUser, Model model) {
         model.addAttribute("roles", roleService.getRoles());
         model.addAttribute("user", activeUser);
-        model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("newuser", new User());
         return "admin/admin";
     }

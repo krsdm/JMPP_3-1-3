@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/users")
+@RequestMapping("/api/users")
+//@CrossOrigin (origins = "http://localhost:63342/")
 public class RestUserController {
     private final UserService userService;
     private final RoleService roleService;
@@ -37,7 +38,7 @@ public class RestUserController {
     }
 
     @PostMapping
-    public User newUser(@RequestBody User user) {
+    public User newUser(@ModelAttribute User user) {
         user.setRoles(user.getRoles().stream()
                 .map(role -> roleService.getByName(role.getName()))
                 .collect(Collectors.toSet()));
@@ -46,7 +47,7 @@ public class RestUserController {
     }
 
     @PutMapping
-    public User updateUser(@RequestBody User user) {
+    public User updateUser(@ModelAttribute User user) {
         user.setRoles(user.getRoles().stream()
                 .map(role -> roleService.getByName(role.getName()))
                 .collect(Collectors.toSet()));

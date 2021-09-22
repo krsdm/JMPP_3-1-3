@@ -12,7 +12,17 @@
 </head>
 <body class="h-100">
 
-    <th:block th:insert="admin/admin :: navbar"></th:block>
+<!-- navbar begin -->
+<div class="d-flex bg-dark py-2 px-4 justify-content-between align-items-center" th:fragment="navbar">
+    <h4>
+        <span class="text-light" th:text="${user.getEmail()}"></span>
+        <small class="text-light">with roles:
+            <th:block th:each="role: ${user.getRoles()}" th:text="${role.nameNoPrefix()} + ' '"></th:block>
+        </small>
+    </h4>
+    <a class="text-light text-decoration-none" href="/logout">Logout</a>
+</div>
+<!-- navbar end -->
 
 <div class="container-fluid h-100">
     <div class="row h-100">
