@@ -3,6 +3,7 @@ const allRoles = $("#addForm option").toArray().map(option => option.text)
 let userTable = document.querySelector('#userTable tbody')
 let addForm = document.querySelector('#addForm')
 let editForm = document.querySelector('#editForm')
+let delForm = document.querySelector('#delForm')
 
 renderUserTable()
 
@@ -18,18 +19,6 @@ userTable.addEventListener('click', click => {
         $("#delAge").val(user.age)
         $("#delEmail").val(user.email)
         $('#delRoles').html(user.roles.map(role => `<option value='ROLE_${role}'>${role}</option>`))
-
-        $('#del-submit').click(function () {
-            fetch(`${url}/${user.id}`, {method: 'DELETE'})
-                .then(response => {
-                    if (response.ok) {
-                        $(".modal").modal("hide")
-                        renderUserTable()
-                    } else {
-                        // todo messages
-                    }
-                })
-        })
     }
 
     // при клике по кнопке Edit, данные о юзере из таблицы помещаются в модальное окно
@@ -43,23 +32,10 @@ userTable.addEventListener('click', click => {
         $("#editPassword").val(user.password)
         $('#editRoles').html(allRoles.map(role =>
             `<option value='ROLE_${role}' ${user.roles.indexOf(role) > -1 ? 'selected' : null}>${role}</option>`))
-
-        $('#edit-submit').click(function () {
-            fetch(url, {method: 'PUT', body: new FormData(editForm)})
-                .then(response => {
-                    if (response.ok) {
-                        $(".modal").modal("hide")
-                        renderUserTable()
-                    } else {
-                        // todo messages
-                    }
-                })
-        })
     }
 
 })
 
-// отслеживает отправку формы добавления нового юзера
 addForm.addEventListener('submit', evt => {
     evt.preventDefault()
     fetch(url, {method: 'POST', body: new FormData(addForm)})
@@ -68,26 +44,41 @@ addForm.addEventListener('submit', evt => {
     document.querySelector('#tableLink').click()
     addForm.reset()
     window.scrollTo(0,0)
+})
 
-    // todo messeges
+delForm.addEventListener('submit', evt => {
+    evt.preventDefault()
+    const id = delForm.querySelector('#delId').value
+    fetch(`${url}/${id}`, {method: 'DELETE'})
+        .then(result => result.text())
+        .then(user => renderUserTable())
+    $(".modal").modal("hide")
+})
+
+editForm.addEventListener('submit', evt => {
+    evt.preventDefault()
+    fetch(url, {method: 'PUT', body: new FormData(editForm)})
+        .then(result => result.json())
+        .then(user => renderUserTable())
+    $(".modal").modal("hide")
 })
 
 function getUserByEvent(click) {
     let user = {}
     // строка таблицы, в которой была нажата кнопка
     const userTableRow = click.target.parentElement.parentElement
-    // из строки берем данные о пользователе и формируем объект user
-    user.id = userTableRow.querySelector('.id').innerHTML
-    user.name = userTableRow.querySelector('.name').innerHTML
-    user.surname = userTableRow.querySelector('.surname').innerHTML
-    user.age = userTableRow.querySelector('.age').innerHTML
-    user.email = userTableRow.querySelector('.email').innerHTML
-    user.password = userTableRow.querySelector('.password').innerHTML
-    user.roles = userTableRow.querySelector('.roles').innerHTML.trim().split(' ')
+    // из строки берутся данные о пользователе и формируется user
+    user.id = userTableRow.querySelector('.id').textContent
+    user.name = userTableRow.querySelector('.name').textContent
+    user.surname = userTableRow.querySelector('.surname').textContent
+    user.age = userTableRow.querySelector('.age').textContent
+    user.email = userTableRow.querySelector('.email').textContent
+    user.password = userTableRow.querySelector('.password').textContent
+    user.roles = userTableRow.querySelector('.roles').textContent.trim().split(' ')
     return user
 }
 
-function renderUserTable(users) {
+function renderUserTable() {
     fetch(url)
         .then(response => response.json())
         .then(users => {

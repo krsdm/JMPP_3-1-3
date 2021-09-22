@@ -82,6 +82,7 @@
                         <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
+                                    <form id="editForm">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="editModalLabel">Edit User</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -89,46 +90,45 @@
                                         </button>
                                     </div>
                                     <div class="modal-body font-weight-bold">
-                                        <form id="editForm" th:method="PATCH" th:object="${user}">
-                                            <div class="d-flex flex-column align-items-center form-group">
-                                                <label for="editId" class="col-form-label">Id</label>
-                                                <input type="text" class="form-control form-control-sm" id="editId" name="id" readonly>
-                                            </div>
-                                            <div class="d-flex flex-column align-items-center form-group">
-                                                <label for="editName" class="col-form-label">First Name</label>
-                                                <small class="form-text text-muted">3-20 characters, only letters</small>
-                                                <input type="text" class="form-control form-control-sm" id="editName" name="name" pattern="[A-zА-я]{3,20}" required>
-                                            </div>
-                                            <div class="d-flex flex-column align-items-center form-group">
-                                                <label for="editSurname" class="col-form-label">Last Name</label>
-                                                <small class="form-text text-muted">0-20 characters, only letters</small>
-                                                <input type="text" class="form-control form-control-sm" id="editSurname" name="surname" pattern="[A-zА-я]{3,20}">
-                                            </div>
-                                            <div class="d-flex flex-column align-items-center form-group">
-                                                <label for="editAge" class="col-form-label">Age</label>
-                                                <small class="form-text text-muted">Min 14, max 120 years</small>
-                                                <input type="number" class="form-control form-control-sm" id="editAge" name="age" min="14" max="120" required>
-                                            </div>
-                                            <div class="d-flex flex-column align-items-center form-group">
-                                                <label for="editEmail" class="col-form-label">Email</label>
-                                                <small class="form-text text-muted">Example: name@mail.com</small>
-                                                <input type="email" class="form-control form-control-sm" id="editEmail" name="email" required>
-                                            </div>
-                                            <div class="d-flex flex-column align-items-center form-group">
-                                                <label for="editPassword" class="col-form-label">Password</label>
-                                                <small class="form-text text-muted">Min 3, max 60 any characters</small>
-                                                <input type="text" class="form-control form-control-sm" id="editPassword" name="password" pattern="\S{3,60}$" required>
-                                            </div>
-                                            <div class="d-flex flex-column align-items-center form-group">
-                                                <label for="editRoles">Role</label>
-                                                <select multiple class="form-control form-control-sm" id="editRoles" name="roles" size="2" required></select>
-                                            </div>
-                                        </form>
+                                        <div class="d-flex flex-column align-items-center form-group">
+                                            <label for="editId" class="col-form-label">Id</label>
+                                            <input type="text" class="form-control form-control-sm" id="editId" name="id" readonly>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center form-group">
+                                            <label for="editName" class="col-form-label">First Name</label>
+                                            <small class="form-text text-muted">3-20 characters, only letters</small>
+                                            <input type="text" class="form-control form-control-sm" id="editName" name="name" pattern="[A-zА-я]{3,20}" required>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center form-group">
+                                            <label for="editSurname" class="col-form-label">Last Name</label>
+                                            <small class="form-text text-muted">0-20 characters, only letters</small>
+                                            <input type="text" class="form-control form-control-sm" id="editSurname" name="surname" pattern="[A-zА-я]{3,20}">
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center form-group">
+                                            <label for="editAge" class="col-form-label">Age</label>
+                                            <small class="form-text text-muted">Min 14, max 120 years</small>
+                                            <input type="number" class="form-control form-control-sm" id="editAge" name="age" min="14" max="120" required>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center form-group">
+                                            <label for="editEmail" class="col-form-label">Email</label>
+                                            <small class="form-text text-muted">Example: name@mail.com</small>
+                                            <input type="email" class="form-control form-control-sm" id="editEmail" name="email" required>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center form-group">
+                                            <label for="editPassword" class="col-form-label">Password</label>
+                                            <small class="form-text text-muted">Min 3, max 60 any characters</small>
+                                            <input type="text" class="form-control form-control-sm" id="editPassword" name="password" pattern="\S{3,60}$" required>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center form-group">
+                                            <label for="editRoles">Role</label>
+                                            <select multiple class="form-control form-control-sm" id="editRoles" name="roles" size="2" required></select>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                         <input type="submit" class="btn btn-primary" value="Edit" id="edit-submit">
                                     </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -138,6 +138,7 @@
                         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
+                                    <form id="delForm">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="deleteModalLabel">Delete User</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -145,37 +146,36 @@
                                         </button>
                                     </div>
                                     <div class="modal-body font-weight-bold">
-                                        <form id="delForm" th:method="DELETE">
-                                            <div class="d-flex flex-column align-items-center form-group">
-                                                <label for="delId" class="col-form-label">Id</label>
-                                                <input type="text" class="form-control form-control-sm" id="delId" name="id" readonly>
-                                            </div>
-                                            <div class="d-flex flex-column align-items-center form-group">
-                                                <label for="delName" class="col-form-label">First Name</label>
-                                                <input type="text" class="form-control form-control-sm" id="delName" name="name" readonly>
-                                            </div>
-                                            <div class="d-flex flex-column align-items-center form-group">
-                                                <label for="delSurname" class="col-form-label">Last Name</label>
-                                                <input type="text" class="form-control form-control-sm" id="delSurname" name="surname" readonly>
-                                            </div>
-                                            <div class="d-flex flex-column align-items-center form-group">
-                                                <label for="delAge" class="col-form-label">Age</label>
-                                                <input type="text" class="form-control form-control-sm" id="delAge" name="age" readonly>
-                                            </div>
-                                            <div class="d-flex flex-column align-items-center form-group">
-                                                <label for="delEmail" class="col-form-label">Email</label>
-                                                <input type="text" class="form-control form-control-sm" id="delEmail" name="email" readonly>
-                                            </div>
-                                            <div class="d-flex flex-column align-items-center form-group">
-                                                <label for="delRoles">Role</label>
-                                                <select multiple class="form-control form-control-sm" id="delRoles" name="roles" readonly size="2"></select>
-                                            </div>
-                                        </form>
+                                        <div class="d-flex flex-column align-items-center form-group">
+                                            <label for="delId" class="col-form-label">Id</label>
+                                            <input type="text" class="form-control form-control-sm" id="delId" name="id" readonly>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center form-group">
+                                            <label for="delName" class="col-form-label">First Name</label>
+                                            <input type="text" class="form-control form-control-sm" id="delName" name="name" readonly>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center form-group">
+                                            <label for="delSurname" class="col-form-label">Last Name</label>
+                                            <input type="text" class="form-control form-control-sm" id="delSurname" name="surname" readonly>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center form-group">
+                                            <label for="delAge" class="col-form-label">Age</label>
+                                            <input type="text" class="form-control form-control-sm" id="delAge" name="age" readonly>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center form-group">
+                                            <label for="delEmail" class="col-form-label">Email</label>
+                                            <input type="text" class="form-control form-control-sm" id="delEmail" name="email" readonly>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center form-group">
+                                            <label for="delRoles">Role</label>
+                                            <select multiple class="form-control form-control-sm" id="delRoles" name="roles" readonly size="2"></select>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                         <input type="submit" class="btn btn-danger" value="Delete" id="del-submit">
                                     </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -189,38 +189,39 @@
                             <h5 class="my-0 mx-2">Add New User</h5>
                         </div>
                         <div class="p-3 bg-white border border-top-0">
-                            <form id="addForm" th:object="${newuser}">
+                            <form id="addForm">
                                 <div class="wrapper d-flex flex-column align-items-center font-weight-bold">
                                     <div class="d-flex flex-column align-items-center form-group col-6">
                                         <label for="name" class="col-form-label">First Name</label>
                                         <small class="form-text text-muted">3-20 characters, only letters</small>
-                                        <input type="text" th:field="*{name}" class="form-control form-control-sm" id="name" name="name" pattern="[A-zА-я]{3,20}" required>
+                                        <input type="text" class="form-control form-control-sm" id="name" name="name" pattern="[A-zА-я]{3,20}" required>
                                     </div>
                                     <div class="d-flex flex-column align-items-center form-group col-6">
                                         <label for="surname" class="col-form-label">Last Name</label>
                                         <small class="form-text text-muted">0-20 characters, only letters</small>
-                                        <input type="text" th:field="*{surname}" class="form-control form-control-sm" id="surname" name="surname" pattern="[A-zА-я]{3,20}">
+                                        <input type="text" class="form-control form-control-sm" id="surname" name="surname" pattern="[A-zА-я]{3,20}">
                                     </div>
                                     <div class="d-flex flex-column align-items-center form-group col-6">
                                         <label for="age" class="col-form-label">Age</label>
                                         <small class="form-text text-muted">Min 14, max 120 years</small>
-                                        <input type="number" th:field="*{age}" class="form-control form-control-sm" id="age" name="age" min="14" max="120" required>
+                                        <input type="number" class="form-control form-control-sm" id="age" name="age" min="14" max="120" required>
                                     </div>
                                     <div class="d-flex flex-column align-items-center form-group col-6">
                                         <label for="email" class="col-form-label">Email</label>
                                         <small class="form-text text-muted">Example name@mail.com</small>
-                                        <input type="email" th:field="*{email}" class="form-control form-control-sm" id="email" name="email" required>
+                                        <input type="email" class="form-control form-control-sm" id="email" name="email" required>
                                     </div>
                                     <div class="d-flex flex-column align-items-center form-group col-6">
                                         <label for="password" class="col-form-label">Password</label>
                                         <small class="form-text text-muted">Min 3, max 60 any characters</small>
-                                        <input type="password" th:field="*{password}" class="form-control form-control-sm" id="password" name="password" pattern="\S{3,60}$" required>
+                                        <input type="password" class="form-control form-control-sm" id="password" name="password" pattern="\S{3,60}$" required>
                                     </div>
                                     <div class="d-flex flex-column align-items-center form-group col-6">
                                         <label for="roles">Role</label>
                                         <select multiple class="form-control form-control-sm" id="roles" name="roles" size="2" required>
-                                            <option value="ROLE_USER">USER</option>
-                                            <option value="ROLE_ADMIN">ADMIN</option>
+                                            <option th:each="role: ${roles}" th:value="${role.getName()}">
+                                                <th:block th:text="${role.nameNoPrefix()}"></th:block>
+                                            </option>
                                         </select>
                                     </div>
                                     <div class="d-flex flex-column align-items-center form-group col-4">
@@ -241,7 +242,6 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<script type="text/javascript" th:src="@{/js/admin.modal.form.js}"></script>
 <script type="text/javascript" th:src="@{/js/admin.js}"></script>
 </body>
 </html>
